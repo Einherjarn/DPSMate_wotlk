@@ -346,7 +346,7 @@ DPSMate.Options.Options = {
 						get = function() return DPSMateSettings["windows"][(DPSMate.Options.Dewdrop:GetOpenedParent() or DPSMate).Key]["filterclasses"]["shaman"] end,
 						set = function() DPSMate.Options:ToggleFilterClass((DPSMate.Options.Dewdrop:GetOpenedParent() or DPSMate).Key, "shaman") end,
 					},
-					shamen = {
+					deathknight = {
 						order = 100,
 						type = 'toggle',
 						name = DPSMate.L["deathknight"],
