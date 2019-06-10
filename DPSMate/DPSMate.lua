@@ -529,11 +529,14 @@ end
 
 function DPSMate:GetClassColor(class)
 	if not classcolor[class] then
-		if class then
+		if class and DPSMateUser[class] then
 			class = DPSMateUser[class][2] or "warrior"
 		else
 			class = "warrior"
 		end
+	end
+	if class == "" then
+		class = "warrior"
 	end
 	return classcolor[class].r, classcolor[class].g, classcolor[class].b, class
 end
