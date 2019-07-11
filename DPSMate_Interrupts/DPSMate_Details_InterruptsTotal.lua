@@ -21,7 +21,6 @@ local hexClassColor = {
 	hunter = "ABD473",
 	paladin = "F58CBA",
 	shaman = "0070DE",
-	deathknight = "C41F3B",
 }
 hexClassColor[""] = "C79C6E"
 

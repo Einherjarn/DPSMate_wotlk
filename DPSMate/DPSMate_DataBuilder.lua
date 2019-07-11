@@ -283,7 +283,7 @@ DPSMate.DB.abilitylen = 0
 -- Local Variables
 local CombatState = false
 local cheatCombat = 0
-local UpdateTime = 0.25
+local UpdateTime = 0.125
 local LastUpdate = 0
 local MainLastUpdate = 0
 local MainUpdateTime = 1.5
@@ -314,6 +314,10 @@ local floor = floor
 local UnitIsConnected = UnitIsConnected
 local tablemodes = {[1]="total", [2]="current"}
 local time, gen, path
+
+local SendAddonMessage = function(prio, prefix, text, chattype)
+	ChatThrottleLib:SendAddonMessage(prio, prefix, text, chattype)
+end
 
 -- Begin Functions
 

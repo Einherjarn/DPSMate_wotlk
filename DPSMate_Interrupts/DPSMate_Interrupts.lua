@@ -6,7 +6,7 @@ DPSMate.Options.Options[1]["args"]["interrupts"] = {
 	type = 'toggle',
 	name = DPSMate.L["interrupts"],
 	desc = DPSMate.L["show"].." "..DPSMate.L["interrupts"]..".",
-	get = function() return DPSMateSettings["windows"][(DPSMate.Options.Dewdrop:GetOpenedParent() or DPSMate).Key or 1]["options"][1]["interrupts"] end,
+	get = function() return DPSMateSettings["windows"][DPSMate.Options.Dewdrop:GetOpenedParent().Key]["options"][1]["interrupts"] end,
 	set = function() DPSMate.Options:ToggleDrewDrop(1, "interrupts", DPSMate.Options.Dewdrop:GetOpenedParent()) end,
 }
 
@@ -23,7 +23,7 @@ function DPSMate.Modules.Interrupts:GetSortedTable(arr,k)
 		if (not DPSMateUser[name][4] or (DPSMateUser[name][4] and not DPSMateSettings["mergepets"])) then
 			if DPSMate:ApplyFilter(k, name) then
 				local CV = val["i"][1]
-				if DPSMateUser[name][5] and arr[DPSMateUser[DPSMateUser[name][5]][1]] and DPSMateSettings["mergepets"] and DPSMateUser[name][5]~=name then
+				if DPSMateUser[name] and DPSMateUser[name][5] and DPSMateUser[DPSMateUser[name][5]] and arr[DPSMateUser[DPSMateUser[name][5]][1]] and DPSMateSettings["mergepets"] and DPSMateUser[name][5]~=name then
 					CV=CV+arr[DPSMateUser[DPSMateUser[name][5]][1]]["i"][1]
 				end
 				local i = 1

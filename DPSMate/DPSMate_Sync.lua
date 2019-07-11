@@ -37,12 +37,12 @@ function DPSMate.Sync:OnLoad()
 	pid = DPSMate.DB:BuildUser(UnitName("player"), strlower(playerclass))
 end
 
-local function Vote()
+function DPSMate.Sync:Vote()
 	DPSMate_Vote:Hide()
 	SendAddonMessage("DPSMate_Vote", nil, "RAID")
 end
 
-local function StartVote()
+function DPSMate.Sync:StartVote()
 	if not voteStarter then
 		SendAddonMessage("DPSMate_StartVote", nil, "RAID")
 		voteStarter = true
@@ -52,7 +52,7 @@ local function StartVote()
 	end
 end
 
-local function CountVote()
+function DPSMate.Sync:CountVote()
 	if voteStarter then
 		voteCount=voteCount+1
 		if voteCount >= (participants/2) and (GetTime()-abort)>=30 then
@@ -60,12 +60,12 @@ local function CountVote()
 			voteStarter = false
 			voteCount = 1
 			participants = 1
-			self:VoteSuccess()
+			DPSMate.Sync:VoteSuccess()
 		end
 	end
 end
 
-local function DismissVote()
+function DPSMate.Sync:DismissVote()
 	if voteStarter then
 		voteTime=voteTime+arg1
 		if voteTime>=30 then
@@ -79,28 +79,28 @@ local function DismissVote()
 			voteStarter = false
 			voteCount = 1
 			voteTime = 0
-			self:VoteSuccess()
+			VoteSuccess()
 		end
 	end
 end
 
-local function VoteSuccess(key)
+function DPSMate.Sync:VoteSuccess(key)
 	DPSMate:SendMessage(DPSMate.L["votesuccess"])
 	DPSMate.Options:PopUpAccept(true, true)
 end
 
-local function CountParticipants()
+function DPSMate.Sync:CountParticipants()
 	if voteStarter then
 		participants=participants+1
 	end
 end
 
-local function Participate()
+function DPSMate.Sync:Participate()
 	SendAddonMessage("DPSMate_Participate", nil, "RAID")
 end
 
-local function ReceiveStartVote() 
-	Participate()
+function DPSMate.Sync:ReceiveStartVote() 
+	DPSMate.Sync:Participate()
 	if DPSMateSettings["dataresetssync"] == 3 then
 		DPSMate_Vote:Show()
 	elseif DPSMateSettings["dataresetssync"] == 1 then
@@ -115,7 +115,7 @@ function DPSMate.Sync:AbortVote()
 	end
 end
 
-local function ReceiveAbort()
+function DPSMate.Sync:ReceiveAbort()
 	DPSMate:SendMessage(DPSMate.L["resetaborted"])
 	abort = GetTime()
 	participants = 1000000
@@ -130,11 +130,11 @@ function DPSMate.Sync:HelloWorld()
 	end
 end
 
-local function GreetBack()
+function DPSMate.Sync:GreetBack()
 	SendAddonMessage("DPSMate_Greet", DPSMate.SYNCVERSION, "RAID")
 end
 
-local function ReceiveGreet(arg2, arg4)
+function DPSMate.Sync:ReceiveGreet(arg2, arg4)
 	if (GetTime()-bc)<=3 then
 		DPSMate:SendMessage(am..". "..arg4.." (v"..arg2..")")
 		am = am + 1
@@ -155,14 +155,14 @@ local function OnEvent(event)
 end
 
 Exec = {
-	["DPSMate_HelloWorld"] = function() GreetBack() end,
-	["DPSMate_Greet"] = function(arg2,arg4) ReceiveGreet(arg2, arg4) end,
-	["DPSMate_AbortVote"] = function() ReceiveAbort() end,
-	["DPSMate_Vote"] = function() CountVote() end,
-	["DPSMate_StartVote"] = function() ReceiveStartVote() end,
-	["DPSMate_VoteSuccess"] = function() VoteSuccess() end,
+	["DPSMate_HelloWorld"] = function() DPSMate.Sync:GreetBack() end,
+	["DPSMate_Greet"] = function(arg2,arg4) DPSMate.Sync:ReceiveGreet(arg2, arg4) end,
+	["DPSMate_AbortVote"] = function() DPSMate.Sync:ReceiveAbort() end,
+	["DPSMate_Vote"] = function() DPSMate.Sync:CountVote() end,
+	["DPSMate_StartVote"] = function() DPSMate.Sync:ReceiveStartVote() end,
+	["DPSMate_VoteSuccess"] = function() DPSMate.Sync:VoteSuccess() end,
 	["DPSMate_VoteFail"] = function() DPSMate:SendMessage(DPSMate.L["votefailederror"]) end,
-	["DPSMate_Participate"] = function() CountParticipants() end,
+	["DPSMate_Participate"] = function() DPSMate.Sync:CountParticipants() end,
 }
 
 DPSMate.Sync:SetScript("OnEvent", OnEvent)
